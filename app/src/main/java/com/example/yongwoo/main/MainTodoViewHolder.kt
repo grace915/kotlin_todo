@@ -10,4 +10,5 @@ class MainTodoViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         itemView.todo_cb.isChecked = item.checked
         itemView.todo_tv_name.text = item.name
     }
+
 }

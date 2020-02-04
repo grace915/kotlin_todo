@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yongwoo.R
+import com.example.yongwoo.add_edit.AddEditTodoActivity
 import com.example.yongwoo.room.database.MyDatabase
 import com.example.yongwoo.room.entitiy.TodoItem
 import kotlinx.android.synthetic.main.item_todo.view.*
@@ -35,6 +36,15 @@ class MainTodoAdapter(private val context: Context) : RecyclerView.Adapter<MainT
         notifyDataSetChanged()
     }
 
+    fun refresh(){
+        myDatabase?.todoDao()?.getTodos()?.also {
+            itemList.clear()
+            itemList.addAll(it)
+            notifyDataSetChanged()
+        }
+
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainTodoViewHolder {
         var viewHolder = MainTodoViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_todo, parent, false))
 
@@ -51,6 +61,12 @@ class MainTodoAdapter(private val context: Context) : RecyclerView.Adapter<MainT
                 when(menu[which]){
                     "삭제"->deleteItem(itemList[viewHolder.adapterPosition])
                     "수정"->{
+                        val editIntent = Intent(context,AddEditTodoActivity::class.java)
+                        editIntent.putExtra("mode",AddEditTodoActivity.MODE_EDIT)
+                        editIntent.putExtra("item_id",itemList[viewHolder.adapterPosition].id)
+                        context.startActivity(editIntent)
+
+
 
                     }
                     "취소"->{}
@@ -72,5 +88,7 @@ class MainTodoAdapter(private val context: Context) : RecyclerView.Adapter<MainT
     override fun onBindViewHolder(holder: MainTodoViewHolder, position: Int) {
         holder.onbind(itemList[position])
     }
+
+
 
 }
