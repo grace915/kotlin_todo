@@ -1,7 +1,11 @@
 package com.example.yongwoo.main
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yongwoo.R
@@ -25,6 +29,11 @@ class MainTodoAdapter(private val context: Context) : RecyclerView.Adapter<MainT
         myDatabase?.todoDao()?.insertTodo(item)
         notifyDataSetChanged()
     }
+    fun deleteItem(item : TodoItem){
+        itemList.remove(item)
+        myDatabase?.todoDao()?.deleteTodo(item)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainTodoViewHolder {
         var viewHolder = MainTodoViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_todo, parent, false))
@@ -33,6 +42,24 @@ class MainTodoAdapter(private val context: Context) : RecyclerView.Adapter<MainT
             itemList[viewHolder.adapterPosition].checked = !itemList[viewHolder.adapterPosition].checked
             myDatabase?.todoDao()?.updateTodo(itemList[viewHolder.adapterPosition])
             notifyDataSetChanged()
+        }
+        viewHolder.itemView.setOnLongClickListener  {
+            val builder = AlertDialog.Builder(parent.context)
+            val menu :Array<String> = arrayOf("삭제","수정","취소")
+            builder.setTitle(itemList[viewHolder.adapterPosition].name)
+            builder.setItems(menu) { dialog, which ->
+                when(menu[which]){
+                    "삭제"->deleteItem(itemList[viewHolder.adapterPosition])
+                    "수정"->{
+
+                    }
+                    "취소"->{}
+                    else->{
+                        Log.d("SetOnLongClickListener","item position error!")}
+
+                } }
+            builder.show()
+            false
         }
 
         return viewHolder
