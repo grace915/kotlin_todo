@@ -7,12 +7,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yongwoo.R
 import com.example.yongwoo.add_edit.AddEditTodoActivity
 import com.example.yongwoo.room.database.MyDatabase
 import com.example.yongwoo.room.entitiy.TodoItem
 import kotlinx.android.synthetic.main.item_todo.view.*
+import java.util.*
 
 class MainTodoAdapter(private val context: Context) : RecyclerView.Adapter<MainTodoViewHolder>() {
     private val myDatabase: MyDatabase? = MyDatabase.getInstance(context)
